@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário — Criação de Landing Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C8922A;
+    --gold-light: #F5D98A;
+    --navy: #1A1F3C;
+    --navy-mid: #252B4A;
+    --cream: #FAF6EE;
+    --cream-dark: #F0E9D8;
+    --text: #1A1F3C;
+    --text-muted: #7A7A8A;
+    --border: rgba(200,146,42,0.25);
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(200,146,42,0.18) 0%, transparent 70%);
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  header h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  header p {
+    color: rgba(255,255,255,0.55);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: var(--navy-mid);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  }
+  .progress-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    min-width: 70px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-pct {
+    font-size: 12px;
+    color: var(--gold-light);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+  }
+
+  /* SECTION */
+  .section {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px rgba(26,31,60,0.05);
+    transition: box-shadow 0.2s;
+  }
+  .section:focus-within {
+    box-shadow: 0 4px 24px rgba(26,31,60,0.1);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .section-num {
+    width: 32px; height: 32px;
+    background: var(--gold);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+  }
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  /* FIELDS */
+  .field { margin-bottom: 1.25rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  label .req { color: var(--gold); margin-left: 2px; }
+  label .hint {
+    font-weight: 300;
+    color: var(--text-muted);
+    font-size: 12px;
+    display: block;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  input[type=text], input[type=email], input[type=tel], input[type=url], textarea, select {
+    width: 100%;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
+    resize: vertical;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: #fff;
+  }
+  input::placeholder, textarea::placeholder { color: #BCBCC8; font-style: italic; }
+  textarea { min-height: 100px; line-height: 1.6; }
+
+  /* DYNAMIC LIST */
+  .dynamic-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .dynamic-item { display: flex; gap: 8px; align-items: center; }
+  .dynamic-item input { flex: 1; }
+  .remove-btn {
+    background: transparent;
+    border: 1.5px solid var(--cream-dark);
+    border-radius: 8px;
+    width: 34px; height: 34px;
+    font-size: 18px; line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .remove-btn:hover { border-color: #E24B4A; color: #E24B4A; }
+
+  .add-btn {
+    background: transparent;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gold);
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .add-btn:hover { background: #FBF6EC; border-color: var(--gold); }
+
+  /* CHECKBOXES */
+  .check-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .check-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--text); cursor: pointer;
+    background: var(--cream); border: 1.5px solid var(--cream-dark);
+    border-radius: 8px; padding: 7px 14px;
+    transition: border-color 0.2s, background 0.2s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--gold); }
+  .check-item input { accent-color: var(--gold); width: 15px; height: 15px; }
+  .check-item.active { background: #FBF6EC; border-color: var(--gold); }
+
+  /* SWATCHES */
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .swatch {
+    width: 34px; height: 34px; border-radius: 50%;
+    cursor: pointer; position: relative;
+    border: 3px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .swatch:hover { transform: scale(1.1); }
+  .swatch.selected { border-color: var(--navy); transform: scale(1.15); }
+  .swatch.selected::after {
+    content: '✓';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+
+  /* SUBMIT */
+  .submit-wrap {
+    text-align: center;
+    padding-top: 1.5rem;
+  }
+  .submit-btn {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 56px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(26,31,60,0.2);
+  }
+  .submit-btn:hover { background: #0E1228; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(26,31,60,0.25); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note { font-size: 12px; color: var(--text-muted); margin-top: 10px; font-style: italic; }
+
+  /* RESUMO */
+  #resumo {
+    display: none;
+    background: var(--navy);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    margin-top: 2rem;
+    animation: fadeUp 0.4s ease;
+  }
+  #resumo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--gold-light);
+  }
+  #resumo .resumo-intro {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .resumo-section { margin-bottom: 1.5rem; }
+  .resumo-section h3 {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .resumo-section p, .resumo-section li {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+  }
+  .resumo-section ul { padding-left: 1.2rem; }
+  .resumo-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .btn-copy, .btn-print {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+  }
+  .btn-copy { background: var(--gold); color: #fff; }
+  .btn-print { background: rgba(255,255,255,0.1); color: #fff; }
+  .btn-copy:hover, .btn-print:hover { opacity: 0.85; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 4rem;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Criação de Landing Page</div>
+  <h1>Conte-nos sobre<br><em>você e seus serviços</em></h1>
+  <p>Preencha as informações abaixo para que possamos criar sua página personalizada.</p>
+</header>
+
+<div class="progress-wrap">
+  <span class="progress-label">Progresso</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<main>
+
+  <!-- 1. Identidade -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">Identidade pessoal</div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Nome completo <span class="req">*</span></label>
+        <input type="text" id="f-nome" placeholder="Ex: Sonisley Machado" oninput="updateProgress()">
+      </div>
+      <div class="field">
+        <label>Nome que aparece na página <span class="req">*</span></label>
+        <input type="text" id="f-nomepag" placeholder="Como quer ser chamada/o" oninput="updateProgress()">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Título / Área de atuação <span class="req">*</span>
+        <span class="hint">Como você se apresenta profissionalmente</span>
+      </label>
+      <input type="text" id="f-titulo" placeholder="Ex: Medicina Chinesa, Acupuntura e Aromaterapia" oninput="updateProgress()">
+    </div>
+
+    <div class="field">
+      <label>Sobre você
+        <span class="hint">Fale sobre família, hobbies, rotinas — tudo que conecte com seu público</span>
+      </label>
+      <textarea id="f-sobre" placeholder="Escreva aqui um texto pessoal e autêntico..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Link da foto principal <span class="req">*</span>
+        <span class="hint">Google Drive, Dropbox ou qualquer link público (PNG ou JPG)</span>
+      </label>
+      <input type="url" id="f-foto" placeholder="https://drive.google.com/..." oninput="updateProgress()">
+    </div>
+  </div>
+
+  <!-- 2. Experiência -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">Formação & experiência</div>
+    </div>
+
+    <div class="field">
+      <label>Há quantos anos atua na área? <span class="req">*</span></label>
+      <input type="text" id="f-anos" placeholder="Ex: mais de 20 anos" oninput="updateProgress()">
+    </div>
+
+    <div class="field">
+      <label>Onde estudou
+        <span class="hint">Liste as formações relacionadas aos serviços que você oferece</span>
+      </label>
+      <div class="dynamic-list" id="educacao-list">
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Aromaterapia — Instituto XYZ, 2018"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Acupuntura — Escola ABC, 2015"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('educacao-list','Formação — Instituição, Ano')">+ Adicionar formação</button>
+    </div>
+
+    <div class="field">
+      <label>Habilidades como profissional
+        <span class="hint">Seus diferenciais no atendimento</span>
+      </label>
+      <div class="dynamic-list" id="skills-list">
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Visão holística da situação"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Atendimento sem métodos invasivos"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Excelente ouvinte"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('skills-list','Nova habilidade')">+ Adicionar habilidade</button>
+    </div>
+
+    <div class="field">
+      <label>Sua trajetória na área
+        <span class="hint">Como aprendeu, o que te levou a estudar, casos de sucesso</span>
+      </label>
+      <textarea id="f-experiencia" placeholder="Conte sua história com essa área, o que te motivou e os principais resultados que já alcançou..."></textarea>
+    </div>
+  </div>
+
+  <!-- 3. Serviços -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">Serviços oferecidos</div>
+    </div>
+
+    <div class="field">
+      <label>Formas de atendimento disponíveis</label>
+      <div class="check-group" id="atendimento-group">
+        <label class="check-item"><input type="checkbox" value="Presencial" onchange="toggleCheck(this)"> Presencial</label>
+        <label class="check-item"><input type="checkbox" value="Virtual/Online" onchange="toggleCheck(this)"> Virtual / Online</label>
+        <label class="check-item"><input type="checkbox" value="Meeting360" onchange="toggleCheck(this)"> Meeting360</label>
+        <label class="check-item"><input type="checkbox" value="Híbrido" onchange="toggleCheck(this)"> Híbrido</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Serviços presenciais
+        <span class="hint">Nome do serviço e número de sessões por pacote</span>
+      </label>
+      <div class="dynamic-list" id="presencial-list">
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Aromaterapia — 2 sessões"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Acupuntura — 4 sessões"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Auriculoterapia — 2 sessões"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('presencial-list','Serviço — Nº de sessões')">+ Adicionar serviço presencial</button>
+    </div>
+
+    <div class="field">
+      <label>Serviços virtuais
+        <span class="hint">Serviços disponíveis online (se houver)</span>
+      </label>
+      <div class="dynamic-list" id="virtual-list">
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Consulta online — 1 sessão"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('virtual-list','Serviço virtual')">+ Adicionar serviço virtual</button>
+    </div>
+
+    <div class="field">
+      <label>Link para tabela de valores
+        <span class="hint">URL onde o cliente verá os preços (pode ser WhatsApp, PDF, etc.)</span>
+      </label>
+      <input type="url" id="f-valores" placeholder="https://...">
+    </div>
+  </div>
+
+  <!-- 4. Produtos -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">Produtos disponibilizados</div>
+    </div>
+
+    <div class="field">
+      <label>Formas de entrega dos produtos</label>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" value="Delivery" onchange="toggleCheck(this)"> Delivery</label>
+        <label class="check-item"><input type="checkbox" value="Box de Assinatura" onchange="toggleCheck(this)"> Box de Assinatura</label>
+        <label class="check-item"><input type="checkbox" value="Meeting360" onchange="toggleCheck(this)"> Meeting360</label>
+        <label class="check-item"><input type="checkbox" value="Download digital" onchange="toggleCheck(this)"> Download digital</label>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Lista de produtos
+        <span class="hint">Inclua o tipo: físico, digital ou assinatura</span>
+      </label>
+      <div class="dynamic-list" id="produtos-list">
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Blend para Emoções — Delivery"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Ebook sobre Aromaterapia — Digital"></div>
+        <div class="dynamic-item"><input type="text" placeholder="Ex: Biscoitos com aromas naturais — Delivery"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('produtos-list','Produto — Tipo de entrega')">+ Adicionar produto</button>
+    </div>
+  </div>
+
+  <!-- 5. Galeria -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">Galeria de fotos</div>
+      <span class="section-subtitle">mín. 3 recomendadas</span>
+    </div>
+
+    <div class="field">
+      <label>Links das fotos
+        <span class="hint">Fotos em atividade, atendimentos, eventos — links públicos</span>
+      </label>
+      <div class="dynamic-list" id="fotos-list">
+        <div class="dynamic-item"><input type="url" placeholder="Link da foto 1"></div>
+        <div class="dynamic-item"><input type="url" placeholder="Link da foto 2"></div>
+        <div class="dynamic-item"><input type="url" placeholder="Link da foto 3"></div>
+      </div>
+      <button class="add-btn" onclick="addItem('fotos-list','Link da foto')">+ Adicionar foto</button>
+    </div>
+  </div>
+
+  <!-- 6. CTA e Contato -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">Chamada final & contato</div>
+    </div>
+
+    <div class="field">
+      <label>Mensagem de encerramento da página
+        <span class="hint">O convite final para o visitante entrar em contato ou se inscrever</span>
+      </label>
+      <textarea id="f-cta" placeholder="Ex: Quero ajudar você a encontrar seu equilíbrio com tudo que estudei por mais de 20 anos. Vamos juntos nessa caminhada!"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>WhatsApp / Telefone</label>
+        <input type="tel" id="f-whats" placeholder="(11) 99999-9999">
+      </div>
+      <div class="field">
+        <label>E-mail de contato</label>
+        <input type="email" id="f-email" placeholder="seu@email.com">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Instagram</label>
+        <input type="url" id="f-insta" placeholder="https://instagram.com/...">
+      </div>
+      <div class="field">
+        <label>Link da plataforma / clube</label>
+        <input type="url" id="f-clube" placeholder="https://...">
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Visual -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">Identidade visual</div>
+    </div>
+
+    <div class="field">
+      <label>Cores preferidas
+        <span class="hint">Clique nas cores que combinam com você</span>
+      </label>
+      <div class="swatches">
+        <div class="swatch" style="background:#C8922A" title="Dourado" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#1A1F3C" title="Azul marinho" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#D85A30" title="Terracota" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#1D9E75" title="Verde esmeralda" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#993556" title="Vinho" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#534AB7" title="Roxo" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#E8C4A0" title="Bege/nude" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#2A4A3E" title="Verde floresta" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#1A1A1A" title="Preto" onclick="toggleSwatch(this)"></div>
+        <div class="swatch" style="background:#FFFFFF; box-shadow: inset 0 0 0 1.5px #ddd;" title="Branco" onclick="toggleSwatch(this)"></div>
+      </div>
+      <input type="text" id="f-cores" style="margin-top:12px" placeholder="Ou descreva: ex. dourado + azul marinho + branco">
+    </div>
+
+    <div class="field">
+      <label>Link do logo / marca
+        <span class="hint">Arquivo PNG ou SVG (opcional)</span>
+      </label>
+      <input type="url" id="f-logo" placeholder="https://drive.google.com/...">
+    </div>
+
+    <div class="field">
+      <label>Referências de páginas que você gosta
+        <span class="hint">URLs ou descrição do estilo</span>
+      </label>
+      <textarea id="f-refs" placeholder="Cole links ou descreva o visual que te inspira..." style="min-height:70px;"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Observações gerais</label>
+      <textarea id="f-obs" placeholder="Qualquer informação extra que queira compartilhar..." style="min-height:70px;"></textarea>
+    </div>
+  </div>
+
+  <!-- BOTÃO -->
+  <div class="submit-wrap">
+    <button class="submit-btn" onclick="gerarResumo()">Gerar resumo das informações →</button>
+    <p class="submit-note">Nenhum dado é enviado para servidores. Tudo fica no seu navegador.</p>
+  </div>
+
+  <!-- RESUMO -->
+  <div id="resumo">
+    <h2>Resumo das informações</h2>
+    <p class="resumo-intro">Revise abaixo e compartilhe com quem vai criar sua landing page.</p>
+    <div id="resumo-conteudo"></div>
+    <div class="resumo-actions">
+      <button class="btn-copy" onclick="copiarResumo()">📋 Copiar tudo</button>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>Formulário para criação de landing page personalizada</footer>
+
+<script>
+// PROGRESS
+const requiredFields = ['f-nome','f-nomepag','f-titulo','f-foto','f-anos'];
+function updateProgress() {
+  const filled = requiredFields.filter(id => {
+    const el = document.getElementById(id);
+    return el && el.value.trim().length > 0;
+  }).length;
+  const pct = Math.round((filled / requiredFields.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+// TOGGLE CHECKBOX STYLE
+function toggleCheck(el) {
+  el.closest('.check-item').classList.toggle('active', el.checked);
+}
+
+// SWATCH
+function toggleSwatch(el) {
+  el.classList.toggle('selected');
+}
+
+// ADD ITEM
+function addItem(listId, placeholder) {
+  const list = document.getElementById(listId);
+  const div = document.createElement('div');
+  div.className = 'dynamic-item';
+  div.innerHTML = `<input type="text" placeholder="${placeholder}"><button class="remove-btn" onclick="this.parentElement.remove()" title="Remover">×</button>`;
+  list.appendChild(div);
+  div.querySelector('input').focus();
+}
+
+// GET LIST VALUES
+function getList(id) {
+  return Array.from(document.querySelectorAll(`#${id} input`))
+    .map(i => i.value.trim()).filter(Boolean);
+}
+
+// GET CHECKED
+function getChecked(groupId) {
+  return Array.from(document.querySelectorAll(`#${groupId} input:checked`))
+    .map(i => i.value);
+}
+
+// GET SELECTED SWATCHES
+function getSwatches() {
+  const selected = Array.from(document.querySelectorAll('.swatch.selected'))
+    .map(s => s.getAttribute('title'));
+  const custom = document.getElementById('f-cores')?.value.trim();
+  return [...selected, ...(custom ? [custom] : [])].join(', ');
+}
+
+// GERAR RESUMO
+function gerarResumo() {
+  const nome = document.getElementById('f-nome')?.value.trim();
+  const titulo = document.getElementById('f-titulo')?.value.trim();
+  if (!nome || !titulo) {
+    alert('Por favor, preencha pelo menos o Nome completo e a Área de atuação antes de continuar.');
+    return;
+  }
+
+  const sections = [
+    {
+      title: '1. Identidade pessoal',
+      items: [
+        ['Nome completo', nome],
+        ['Nome na página', document.getElementById('f-nomepag')?.value.trim()],
+        ['Área de atuação', titulo],
+        ['Sobre mim', document.getElementById('f-sobre')?.value.trim()],
+        ['Foto principal', document.getElementById('f-foto')?.value.trim()],
+      ]
+    },
+    {
+      title: '2. Formação & Experiência',
+      items: [
+        ['Anos de atuação', document.getElementById('f-anos')?.value.trim()],
+        ['Formação', getList('educacao-list').join(' | ')],
+        ['Habilidades', getList('skills-list').join(' | ')],
+        ['Trajetória', document.getElementById('f-experiencia')?.value.trim()],
+      ]
+    },
+    {
+      title: '3. Serviços',
+      items: [
+        ['Formas de atendimento', getChecked('atendimento-group').join(', ')],
+        ['Serviços presenciais', getList('presencial-list').join(' | ')],
+        ['Serviços virtuais', getList('virtual-list').join(' | ')],
+        ['Link de valores', document.getElementById('f-valores')?.value.trim()],
+      ]
+    },
+    {
+      title: '4. Produtos',
+      items: [
+        ['Produtos', getList('produtos-list').join(' | ')],
+      ]
+    },
+    {
+      title: '5. Galeria de fotos',
+      items: [
+        ['Fotos', getList('fotos-list').join('\n')],
+      ]
+    },
+    {
+      title: '6. Contato',
+      items: [
+        ['Mensagem final', document.getElementById('f-cta')?.value.trim()],
+        ['WhatsApp', document.getElementById('f-whats')?.value.trim()],
+        ['E-mail', document.getElementById('f-email')?.value.trim()],
+        ['Instagram', document.getElementById('f-insta')?.value.trim()],
+        ['Plataforma/clube', document.getElementById('f-clube')?.value.trim()],
+      ]
+    },
+    {
+      title: '7. Identidade visual',
+      items: [
+        ['Cores', getSwatches()],
+        ['Logo', document.getElementById('f-logo')?.value.trim()],
+        ['Referências', document.getElementById('f-refs')?.value.trim()],
+        ['Observações', document.getElementById('f-obs')?.value.trim()],
+      ]
+    }
+  ];
+
+  let html = '';
+  let plain = 'RESUMO — LANDING PAGE\n' + '='.repeat(40) + '\n\n';
+
+  sections.forEach(sec => {
+    const validItems = sec.items.filter(([,v]) => v);
+    if (!validItems.length) return;
+    html += `<div class="resumo-section"><h3>${sec.title}</h3><ul>`;
+    plain += sec.title + '\n' + '-'.repeat(30) + '\n';
+    validItems.forEach(([label, value]) => {
+      html += `<li><strong>${label}:</strong> ${value.replace(/\n/g, '<br>')}</li>`;
+      plain += `${label}: ${value}\n`;
+    });
+    html += '</ul></div>';
+    plain += '\n';
+  });
+
+  document.getElementById('resumo-conteudo').innerHTML = html;
+  document.getElementById('resumo').style.display = 'block';
+  window._resumoPlain = plain;
+
+  setTimeout(() => {
+    document.getElementById('resumo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// COPIAR
+function copiarResumo() {
+  const text = window._resumoPlain || '';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copiado!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+</script>
+</body>
+</html>
